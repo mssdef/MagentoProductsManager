@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <productsmanager_adminhtml_index_index>
+        <reference name="head">
+            <action method="addJs"><name>jquery/jquery.min.js</name></action>
+            <action method="addJs"><name>jquery/plugins/jquery.form.js</name></action>
+            <action method="addJs"><name>jquery/plugins/jquery.tablesorter.min.js</name></action>
+            <action method="addJs"><name>jquery/jquery.no-conflict.js</name></action>
+            <action method="addJs"><name>ui/jquery.ui.core.js</name></action>
+            <action method="addJs"><name>ui/jquery.ui.widget.js</name></action>
+            <action method="addJs"><name>ui/jquery.ui.mouse.js</name></action>
+            <action method="addJs"><name>ui/jquery.ui.sortable.js</name></action>
+            <action method="addJs"><name>treeview/jquery.treeview.js</name></action>
+        </reference>
+
+        <reference name="content">
+            <block type="productsmanager/adminhtml_productsmanager" name="productsmanager" template="productsmanager/index.phtml"/>
+        </reference>
+    </productsmanager_adminhtml_index_index>
+</layout>
+

@@ -1,0 +1,39 @@
+<?php $data = $this->getProducts() ?>
+<?php $products = $data['products'] ?>
+<?php if (!count($products)): ?>
+  <div>Category is empty</div>
+<?php else: ?>
+<div class="grid">
+<form method="get" action="<?php echo Mage::helper('adminhtml')->getUrl('productsmanager/adminhtml_products/save') ?>" id="products_update_form">
+  <table cellspacing="0" id="productGrid_table" class="data">
+      <thead>
+      <tr class="headings">
+          <th><span class="nobr"><a class="not-sort" title="asc" name="sku" href="#"><span class="sort-sku">SKU</span></a></span></th>
+          <th><span class="nobr"><a class="not-sort" title="asc" name="name" href="#"><span class="sort-name">Name</span></a></span></th>
+          <th><span class="nobr"><a class="not-sort" title="asc" name="price" href="#"><span class="sort-price">Price</span></a></span></th>
+          <th><span class="nobr"><a class="not-sort" title="asc" name="qty" href="#"><span class="sort-qty">Qty</span></a></span></th>
+          <th class=" no-link last"><span class="nobr">Action</span></th>
+      </tr>
+      </thead>
+
+      <?php foreach ($products as $id => $p): ?>
+      <?php $rowClass = @$rowClass == 'even' ? '' : 'even'; ?>
+      <tr class="<?php echo $rowClass ?>">
+          <td class="sku"><?php echo $p['sku'] ?></td>
+          <td class="name"><?php echo $id.' - '.$p['name'] ?><input type="hidden" name="products[<?php echo $id ?>][id]" value="<?php echo $id ?>"/></td>
+          <td class="price"><?php echo $p['price'] ?></td>
+          <td class="stock" style="width:40px;"><input type="text" value="<?php echo $p['stock'] ?>" class="input-text no-changes input-small" name="products[<?php echo $id ?>][stock]"/></td>
+          <td><a href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', array('id' => $id)) ?>">edit</a></td>
+      </tr>
+      <?php endforeach ?>
+  </table>
+</form>
+</div>
+<?php endif ?>
+
+<script language="javascript">
+  jQuery(document).ready(function(){
+    // sort table results
+    jQuery('#productGrid_table').tablesorter();
+  });
+</script>

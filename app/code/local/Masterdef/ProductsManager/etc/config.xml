@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Masterdef_ProductsManager>
+            <version>1.0</version>
+        </Masterdef_ProductsManager>
+    </modules>
+    <admin>
+        <routers>
+            <productsmanager>
+                <use>admin</use>
+                <args>
+                    <module>Masterdef_ProductsManager</module>
+                    <frontName>productsmanager</frontName>
+                </args>
+            </productsmanager>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <catalog module="productsmanager">
+                <children>
+                    <productsmanager translate="title" module="catalog">
+                        <title>Inventory Manager</title>
+                        <sort_order>1</sort_order>
+                        <action>productsmanager/adminhtml_index</action>
+                    </productsmanager>
+                </children>
+            </catalog>
+        </menu>
+        <layout>
+            <updates>
+                <productsmanager>
+                    <file>productsmanager.xml</file>
+                </productsmanager>
+            </updates>
+        </layout>
+    </adminhtml>
+    <global>
+        <blocks>
+            <productsmanager>
+                <class>Masterdef_ProductsManager_Block</class>
+            </productsmanager>
+        </blocks>
+        <models>
+            <productsmanager>
+                <class>Masterdef_ProductsManager_Model</class>
+            </productsmanager>
+        </models>
+        <helpers>
+            <productsmanager>
+                <class>Masterdef_ProductsManager_Helper</class>
+            </productsmanager>
+        </helpers>
+    </global>
+</config>
