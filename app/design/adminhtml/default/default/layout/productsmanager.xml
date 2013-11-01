@@ -5,7 +5,7 @@
             <action method="addJs"><name>jquery/jquery.min.js</name></action>
             <action method="addJs"><name>jquery/plugins/jquery.form.js</name></action>
             <action method="addJs"><name>jquery/plugins/jquery.tablesorter.min.js</name></action>
-            <action method="addJs"><name>jquery/jquery.no-conflict.js</name></action>
+            <action method="addJs"><name>jquery/jquery.noconflict.js</name></action>
             <action method="addJs"><name>ui/jquery.ui.core.js</name></action>
             <action method="addJs"><name>ui/jquery.ui.widget.js</name></action>
             <action method="addJs"><name>ui/jquery.ui.mouse.js</name></action>
