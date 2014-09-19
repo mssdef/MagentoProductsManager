@@ -11,6 +11,7 @@
             <action method="addJs"><name>ui/jquery.ui.mouse.js</name></action>
             <action method="addJs"><name>ui/jquery.ui.sortable.js</name></action>
             <action method="addJs"><name>treeview/jquery.treeview.js</name></action>
+            <action method="addCss"><name>css/productmanager.css</name></action>
         </reference>
 
         <reference name="content">

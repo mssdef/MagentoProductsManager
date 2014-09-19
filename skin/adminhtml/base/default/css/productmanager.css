@@ -1,0 +1,9 @@
+table#productGrid_table thead tr.headings th.header span 
+{
+  color: white;
+}
+
+div.buttons_box div.update_qty
+{
+  float: right;
+}
