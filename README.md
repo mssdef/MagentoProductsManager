@@ -6,4 +6,6 @@ Sample module for Magento for quick product management, search and update prices
 Copy files to server, clear cache and logout/login to admin.
 
 When module enabled, you will see new menu item: 
-https://www.facebook.com/photo.php?fbid=454221371364572&set=a.454217158031660.1073741825.364534030333307&type=1&theater
+https://www.dropbox.com/s/ktz0m6mofxkobfm/2014-09-19_181042.png?dl=0
+https://www.dropbox.com/s/w2y1qjnse5angal/20140919-175956.png?dl=0
+https://www.dropbox.com/s/29n5xwvfwthqlg6/20140919-180129.png?dl=0

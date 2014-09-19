@@ -2,7 +2,7 @@
 <layout version="0.1.0">
     <productsmanager_adminhtml_index_index>
         <reference name="head">
-            <action method="addJs"><name>jquery/jquery.min.js</name></action>
+            <action method="addJs"><name>jquery/jquery-1.11.1.min.js</name></action>
             <action method="addJs"><name>jquery/plugins/jquery.form.js</name></action>
             <action method="addJs"><name>jquery/plugins/jquery.tablesorter.min.js</name></action>
             <action method="addJs"><name>jquery/jquery.noconflict.js</name></action>

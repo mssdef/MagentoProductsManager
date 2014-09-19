@@ -1,1 +1,14 @@
 *.swp
+/lib
+/*.php
+/app/etc/modules/*.xml
+/app/etc
+/app/design/adminhtml/default/default/template
+/app/design/adminhtml/default/default/layout
+/.htaccess*
+/*.txt
+/*.html
+/js/*
+/app/code/community
+/app/code/core
+/app/design/adminhtml/default
