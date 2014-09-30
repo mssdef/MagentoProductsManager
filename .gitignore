@@ -1,4 +1,5 @@
 *.swp
+*.sample
 /lib
 /*.php
 /app/etc/modules/*.xml
@@ -12,3 +13,7 @@
 /app/code/community
 /app/code/core
 /app/design/adminhtml/default
+/var/cache
+/var/locks
+/var/package
+/var/session
