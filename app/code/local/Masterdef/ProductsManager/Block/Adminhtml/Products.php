@@ -38,7 +38,7 @@ class Masterdef_ProductsManager_Block_Adminhtml_Products
             $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
 
             $qty = $stock->getQty() * $stock->getIsInStock();
-            $price = $product->getSpecialPrice();
+            $price = $product->getPrice();
             $ret[$_id]['name'] = $product->getName();
             $ret[$_id]['price'] = Mage::helper('core')->currency($price);
             $ret[$_id]['stock'] = round($qty);

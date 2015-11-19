@@ -23,7 +23,7 @@
           <td class="name"><?php echo $id.' - '.$p['name'] ?><input type="hidden" name="products[<?php echo $id ?>][id]" value="<?php echo $id ?>"/></td>
           <td class="price"><?php echo $p['price'] ?></td>
           <td class="stock" style="width:40px;"><input type="text" value="<?php echo $p['stock'] ?>" class="input-text no-changes input-small" name="products[<?php echo $id ?>][stock]"/></td>
-          <td><a href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', array('id' => $id)) ?>">edit</a></td>
+          <td><a target="_blank" href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', array('id' => $id)) ?>">edit</a></td>
       </tr>
       <?php endforeach ?>
   </table>

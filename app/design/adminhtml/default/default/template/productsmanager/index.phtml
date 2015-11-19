@@ -18,7 +18,7 @@
           </td>
         </tr>
       </table>
-      <div class="update_qty">
+      <div class="update_qty" style="display: none;">
             <button style="" class="scalable task" type="button" id="id_update_qty_button"><span>Update Qty</span></button>
       </div>
     </div>
@@ -38,6 +38,7 @@
             productsScreenUrl + '?search=' + jQuery('#productGrid_product_filter_search').val(), 
             function() {
                 jQuery('#loading-mask').css('display', 'none')
+                jQuery('.update_qty').show();
             }); 
     });
 
