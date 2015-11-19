@@ -12,16 +12,15 @@ class Masterdef_ProductsManager_Block_Adminhtml_Products
         $searchSKU = $this->getRequest()->getParam('search_sku');
 
         if ($search) {
-            // search by product name
+            // search by product name or SKU
             $products = Mage::getModel('catalog/product')->getCollection()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('name', array('like' => "%{$search}%"))
-                ->load();
-        } elseif ($searchSKU) {
-            // search by SKU
-            $products = Mage::getModel('catalog/product')->getCollection()
-                ->addAttributeToSelect('*')
-                ->addAttributeToFilter('sku', array('like' => "%{$searchSKU}%"))
+                ->addAttributeToFilter(
+                    array(
+                        array('attribute' => 'name', 'like' => "%{$search}%"),
+                        array('attribute' => 'sku', 'like' => "%{$search}%"),
+                        )
+                    )
                 ->load();
         } else {
             // no search parameters found
