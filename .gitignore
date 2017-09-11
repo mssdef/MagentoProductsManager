@@ -19,3 +19,14 @@
 /var/session
 /tmp
 /var/report
+/skin/frontend/default
+/skin/frontend/rwd
+/app/design/frontend/rwd
+/app/*.php
+/app/design/frontend/base
+/app/locale
+/dev
+/downloader
+/shell
+/skin/frontend/base
+/var/*

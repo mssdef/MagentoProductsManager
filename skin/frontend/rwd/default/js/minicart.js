@@ -9,17 +9,17 @@
  * http://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
+ * to license@magento.com so we can send you a copy immediately.
  *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
+ * needs please refer to http://www.magento.com for more information.
  *
  * @category    design
- * @package     default_default
- * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @package     rwd_default
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 function Minicart(options) {
@@ -47,7 +47,8 @@ function Minicart(options) {
 }
 
 Minicart.prototype = {
-
+    initAfterEvents : {},
+    removeItemAfterEvents : {},
     init: function() {
         var cart = this;
 
@@ -63,7 +64,7 @@ Minicart.prototype = {
             .unbind('focus.minicart')
             .bind('focus.minicart', function() {
                 cart.previousVal = $j(this).val();
-                cart.displayQuantityButton($j(this))
+                cart.displayQuantityButton($j(this));
             })
             .bind('blur.minicart', function() {
                 cart.revertInvalidValue(this);
@@ -74,6 +75,13 @@ Minicart.prototype = {
             .bind('click.quantity', function() {
                 cart.processUpdateQuantity(this);
         });
+
+        for (var i in this.initAfterEvents) {
+            if (this.initAfterEvents.hasOwnProperty(i) && typeof(this.initAfterEvents[i]) === "function") {
+                this.initAfterEvents[i]();
+            }
+        }
+
     },
 
     removeItem: function(el) {
@@ -98,6 +106,11 @@ Minicart.prototype = {
                 cart.hideOverlay();
                 cart.showError(cart.defaultErrorMessage);
             });
+        }
+        for (var i in this.removeItemAfterEvents) {
+            if (this.removeItemAfterEvents.hasOwnProperty(i) && typeof(this.removeItemAfterEvents[i]) === "function") {
+                this.removeItemAfterEvents[i]();
+            }
         }
     },
 
@@ -130,7 +143,14 @@ Minicart.prototype = {
     updateItem: function(el) {
         var cart = this;
         var input = $j(this.selectors.quantityInputPrefix + $j(el).data('item-id'));
-        var quantity = parseInt(input.val(), 10);
+
+        if (!$j.isNumeric(input.val())) {
+            cart.hideOverlay();
+            cart.showError(cart.defaultErrorMessage);
+            return false;
+        }
+
+        var quantity = input.val();
         cart.hideMessage();
         cart.showOverlay();
         $j.ajax({

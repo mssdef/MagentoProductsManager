@@ -10,18 +10,18 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
+ * to license@magento.com so we can send you a copy immediately.
  *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
+ * needs please refer to http://www.magento.com for more information.
  *
  * @category    Mage
  * @package     Errors
- * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright  Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
  /**
@@ -232,9 +232,12 @@ class Error_Processor
         }
 
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
-        $url = ($isSecure ? 'https://' : 'http://') . $host;
+        $url = ($isSecure ? 'https://' : 'http://') . htmlspecialchars($host, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 433))) {
+        if (!empty($_SERVER['SERVER_PORT'])
+            && preg_match('/\d+/', $_SERVER['SERVER_PORT'])
+            && !in_array($_SERVER['SERVER_PORT'], array(80, 433))
+        ) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
         }
         return  $url;
@@ -439,10 +442,11 @@ class Error_Processor
             $this->reportData['url'] = '';
         }
         else {
-            $this->reportData['url'] = $this->getHostUrl() . $reportData['url'];
+            $this->reportData['url'] = $this->getHostUrl()
+                                    . htmlspecialchars($reportData['url'], ENT_COMPAT | ENT_HTML401, 'UTF-8');
         }
 
-        if ($this->reportData['script_name']) {
+        if (isset($this->reportData['script_name'])) {
             $this->_scriptName = $this->reportData['script_name'];
         }
     }
@@ -460,11 +464,12 @@ class Error_Processor
         $this->_setReportData($reportData);
 
         if (!file_exists($this->_reportDir)) {
-            @mkdir($this->_reportDir, 0777, true);
+            @mkdir($this->_reportDir, 0750, true);
         }
 
+        $reportData = array_map('strip_tags', $reportData);
         @file_put_contents($this->_reportFile, serialize($reportData));
-        @chmod($this->_reportFile, 0777);
+        @chmod($this->_reportFile, 0640);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -473,7 +478,7 @@ class Error_Processor
 
         if (headers_sent()) {
             print '<script type="text/javascript">';
-            print "window.location.href = '{$this->reportUrl}';";
+            print "window.location.href = encodeURI('{$this->reportUrl}');";
             print '</script>';
             exit;
         }
@@ -486,6 +491,7 @@ class Error_Processor
      */
     public function loadReport($reportId)
     {
+        $reportData = false;
         $this->reportId = $reportId;
         $this->_reportFile = $this->_reportDir . '/' . $reportId;
 
@@ -493,7 +499,14 @@ class Error_Processor
             header("Location: " . $this->getBaseUrl());
             die();
         }
-        $this->_setReportData(unserialize(file_get_contents($this->_reportFile)));
+
+        $reportContent = file_get_contents($this->_reportFile);
+        if (!preg_match('/[oc]:[+\-]?\d+:"/i', $reportContent )) {
+            $reportData = unserialize($reportContent );
+        }
+        if (is_array($reportData)) {
+            $this->_setReportData($reportData);
+        }
     }
 
     /**
@@ -509,11 +522,11 @@ class Error_Processor
         $this->postData['email']     = (isset($_POST['email'])) ? trim(htmlspecialchars($_POST['email'])) : '';
         $this->postData['telephone'] = (isset($_POST['telephone'])) ? trim(htmlspecialchars($_POST['telephone'])) : '';
         $this->postData['comment']   = (isset($_POST['comment'])) ? trim(htmlspecialchars($_POST['comment'])) : '';
+        $url = htmlspecialchars($this->reportData['url'], ENT_COMPAT | ENT_HTML401);
 
         if (isset($_POST['submit'])) {
             if ($this->_validate()) {
-
-                $msg  = "URL: {$this->reportData['url']}\n"
+                $msg  = "URL: {$url}\n"
                     . "IP Address: {$this->_getClientIp()}\n"
                     . "First Name: {$this->postData['firstName']}\n"
                     . "Last Name: {$this->postData['lastName']}\n"
@@ -536,7 +549,7 @@ class Error_Processor
         } else {
             $time = gmdate('Y-m-d H:i:s \G\M\T');
 
-            $msg = "URL: {$this->reportData['url']}\n"
+            $msg = "URL: {$url}\n"
                 . "IP Address: {$this->_getClientIp()}\n"
                 . "Time: {$time}\n"
                 . "Error:\n{$this->reportData[0]}\n\n"

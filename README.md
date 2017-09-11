@@ -1,5 +1,5 @@
-MagentoProductsManager
-======================
+MagentoProductsManager for Magento 1.x
+======================================
 
 Sample module for Magento for quick product management, search and update prices. Magento custom extension.
 

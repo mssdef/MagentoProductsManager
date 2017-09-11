@@ -10,18 +10,18 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
+ * to license@magento.com so we can send you a copy immediately.
  *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
+ * needs please refer to http://www.magento.com for more information.
  *
  * @category    Mage
  * @package     Mage_Connect
- * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright  Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
@@ -161,5 +161,37 @@ class Maged_View
     public function getFormKey()
     {
         return $this->controller()->getFormKey();
+    }
+
+    /**
+     * Escape html entities
+     *
+     * @param   mixed $data
+     * @param   array $allowedTags
+     * @return  mixed
+     */
+    public function escapeHtml($data, $allowedTags = null)
+    {
+        if (is_array($data)) {
+            $result = array();
+            foreach ($data as $item) {
+                $result[] = $this->escapeHtml($item);
+            }
+        } else {
+            // process single item
+            if (strlen($data)) {
+                if (is_array($allowedTags) and !empty($allowedTags)) {
+                    $allowed = implode('|', $allowedTags);
+                    $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
+                    $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+                    $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
+                } else {
+                    $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+                }
+            } else {
+                $result = $data;
+            }
+        }
+        return $result;
     }
 }

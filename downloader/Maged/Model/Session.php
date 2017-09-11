@@ -10,18 +10,18 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
+ * to license@magento.com so we can send you a copy immediately.
  *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
+ * needs please refer to http://www.magento.com for more information.
  *
  * @category    Mage
  * @package     Mage_Connect
- * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright  Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
@@ -48,7 +48,7 @@ class Maged_Model_Session extends Maged_Model
      */
     public function start()
     {
-        if (class_exists('Mage') && Mage::isInstalled()) {
+        if ($this->controller()->isInstalled()) {
             // initialize Magento Config
             Mage::app();
             $this->_session = Mage::getSingleton('admin/session');
@@ -82,9 +82,25 @@ class Maged_Model_Session extends Maged_Model
     }
 
     /**
-     * Authentication to downloader
+     * Unset value by key
+     *
+     * @param string $key
+     * @return $this
      */
-    public function authenticate()
+    public function delete($key)
+    {
+        if (isset($_SESSION[$key])) {
+            unset($_SESSION[$key]);
+        }
+        return $this;
+    }
+
+    /**
+     * Authentication to downloader
+     * @param Maged_BruteForce_Validator $bruteForceValidator
+     * @return $this
+     */
+    public function authenticate(Maged_BruteForce_Validator $bruteForceValidator )
     {
         if (!$this->_session) {
             return $this;
@@ -103,6 +119,13 @@ class Maged_Model_Session extends Maged_Model
         }
 
         try {
+            if (isset($_POST['username']) && !$this->validateFormKey()) {
+                $this->controller()
+                    ->redirect(
+                        $this->controller()->url(),
+                        true
+                    );
+            }
             if ( (isset($_POST['username']) && empty($_POST['username']))
                 || (isset($_POST['password']) && empty($_POST['password']))) {
                 $this->addMessage('error', 'Invalid user name or password');
@@ -114,7 +137,10 @@ class Maged_Model_Session extends Maged_Model
             $user = $this->_session->login($_POST['username'], $_POST['password']);
             $this->_session->refreshAcl();
             if ($this->_checkUserAccess($user)) {
+                $bruteForceValidator->doGoodLogin();
                 return $this;
+            } else {
+                $bruteForceValidator->doBadLogin();
             }
         } catch (Exception $e) {
             $this->addMessage('error', $e->getMessage());
@@ -233,5 +259,38 @@ class Maged_Model_Session extends Maged_Model
             $this->set('_form_key', Mage::helper('core')->getRandomString(16));
         }
         return $this->get('_form_key');
+    }
+
+    /**
+     * Validate Form Key
+     *
+     * @return bool
+     */
+    public function validateFormKey()
+    {
+        if (!($formKey = $_REQUEST['form_key']) || $formKey != $this->getFormKey()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Validate key for cache cleaning
+     *
+     * @return bool
+     */
+    public function validateCleanCacheKey()
+    {
+        $result = false;
+        $validateKey = $this->get('validate_cache_key');
+        if ($validateKey
+            && !empty($_REQUEST['validate_cache_key'])
+            && $validateKey == $_REQUEST['validate_cache_key']
+        ) {
+            $result = true;
+        }
+        $this->delete('validate_cache_key');
+
+        return $result;
     }
 }
