@@ -17,3 +17,5 @@
 /var/locks
 /var/package
 /var/session
+/tmp
+/var/report
