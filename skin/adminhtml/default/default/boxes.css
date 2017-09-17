@@ -567,6 +567,7 @@ td.divider              { font-size:1px; line-height:0; }
 .wrapper { min-width:960px; }
 .wrapper-popup { min-width:750px; }
 .header { background:url(images/header_top_bg.gif) repeat-x #425e66; text-align:right; }
+table#productGrid_table thead tr.headings th.header { background:none; color:#2d444f; text-align:left; }
 .middle { min-height:450px; background:url(images/simple_container_bg.gif) repeat-x #fff; padding:23px 27px 0 27px; }
 .middle-popup { border-bottom:3px solid #fff; background:url(images/middle_bg.gif) repeat-x 0 100% #fff; padding:0 0 0 0; background:yellow; }
 .container-collapsed { padding:1.8em 2.2em 1.8em 2em; padding-top:0; }
