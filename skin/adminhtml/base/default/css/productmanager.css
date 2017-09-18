@@ -7,3 +7,35 @@ div.buttons_box div.update_qty
 {
   float: right;
 }
+
+.grid tr.headings th.header a
+{
+  padding: 1px 4px 0 0;
+}
+
+.grid tr.headings th.header a span
+{
+  background-position: right 50%;
+  background-repeat: no-repeat;
+  display: block;
+  padding-left: 8px;
+}
+
+table#productGrid_table thead tr.headings th.headerSortDown span a,
+table#productGrid_table thead tr.headings th.headerSortUp span a
+{
+  background: url(../../../default/default/images/sort_on_bg.gif) 0 0 no-repeat;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
+  padding-bottom2: 2px;
+}
+
+table#productGrid_table thead tr.headings th.headerSortDown a span
+{
+  background-image: url(../../../default/default/images/grid_sort_asc.gif);
+}
+
+table#productGrid_table thead tr.headings th.headerSortUp a span
+{
+  background-image: url(../../../default/default/images/grid_sort_desc.gif);
+}
